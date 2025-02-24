@@ -5,6 +5,7 @@ submit.addEventListener("click", () => {
 });
 const locationContainer = document.getElementById("location-container");
 const dateContainter = document.getElementById("date-container");
+const currentDayContainer = document.getElementById("current-day-container");
 
 const getWeatherInfo = async (location) => {
   try {
@@ -24,7 +25,7 @@ const getWeatherInfo = async (location) => {
     }
 
     const responseData = await response.json();
-    // console.log(responseData)
+     console.log(responseData)
 
     // get and display address
     const getAddress = (response) => ({
@@ -36,11 +37,12 @@ const getWeatherInfo = async (location) => {
       const { responseAddress, responseResolvedAddress } = getAddress(response);
       const locationAddress = document.createElement("div");
       const locationResolvedAddress = document.createElement("div");
+      locationResolvedAddress.classList.add("resolved-address")
 
       locationAddress.innerText = responseAddress;
       locationResolvedAddress.innerText = responseResolvedAddress;
 
-      locationContainer.appendChild(locationAddress);
+      //locationContainer.appendChild(locationAddress);
       locationContainer.appendChild(locationResolvedAddress);
     };
 
@@ -55,9 +57,24 @@ const getWeatherInfo = async (location) => {
         dateContainter.appendChild(dateAndTemp.cloneNode(true));
       });
     };
+
+    const displayHours = (response) => {
+      const currentDay = getDays(response)[0];
+      currentDayHours = currentDay.hours;
+      console.log(currentDayHours);
+      currentDayHours.forEach((hour) => {
+        const currentDayElement = document.createElement("div");
+        currentDayElement.innerText = hour.datetime;
+        currentDayContainer.appendChild(currentDayElement.cloneNode(true));
+      });
+    }
+
     displayDays(responseData);
+    displayHours(responseData);
     displayAddress(responseData);
   } catch (error) {
     console.error("Error fetching weather data:", error.message);
   }
 };
+
+getWeatherInfo("melbourne");
