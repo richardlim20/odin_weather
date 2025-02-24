@@ -1,6 +1,17 @@
-*{
-  margin: 0px 4px;
+:root {
+  --primary: #202b3b;
+  --secondary: #FFFFFF;
+  --tertiary: #737A85;
+  --highlight: #0095FF;
+  --background: #0B131E;
+  --rounded: 2rem;
 }
+
+body {
+  background-color: var(--background);
+  color: var(--secondary);
+}
+
 .resolved-address{
   text-align: center;
   font-weight: bold;
@@ -9,8 +20,7 @@
 
 header{
   grid-area: header;
-  padding: 1rem;
-  margin: 1rem 0rem;
+  padding: 0.5rem;
 }
 
 header > h1 {
@@ -21,10 +31,15 @@ header > h1 {
 #input-container {
   display: flex;
   justify-content: center;
+  gap: 1rem;
+  margin-bottom: 1rem;
 }
 
 #input-location {
   flex-grow: 1;
+  background-color: var(--primary);
+  border-radius: var(--rounded);
+  padding: 0.5rem;
 }
 
 #location-container {
@@ -36,6 +51,9 @@ header > h1 {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  background-color: var(--primary);
+  border-radius: var(--rounded);
+  padding: 2rem;
 }
 
 
@@ -43,10 +61,16 @@ header > h1 {
   grid-area: section;
   display: flex;
   flex-wrap: wrap;
+  background-color: var(--primary);
+  border-radius: var(--rounded);
+  padding: 2rem;
 }
 
 #air-conditions {
   grid-area: article;
+  background-color: var(--primary);
+  border-radius: var(--rounded);
+  padding: 2rem;
 }
 #grid-container {
   height: 100vh;
@@ -54,8 +78,12 @@ header > h1 {
   grid-template-columns: 1fr 1fr 1fr 1fr;
   grid-template-rows: 1fr 4fr 4fr 4fr;
   grid-template-areas: 
-    "header header header header"
+    "header header header ."
     "main main main sidebar"
     "section section section sidebar"
     "article article article sidebar";
+}
+
+#grid-container > div{
+  margin: 1rem;
 }
