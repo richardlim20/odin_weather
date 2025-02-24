@@ -8,9 +8,16 @@ const dateContainter = document.getElementById("date-container");
 
 const getWeatherInfo = async (location) => {
   try {
+    const loading = document.getElementById("loading");
+    loading.innerText = "loading"
+
     const response = await fetch(
       `https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/${location}?unitGroup=metric&key=KR7QNXQQLPNJN5WYLDDYF2JJW&contentType=json`
     );
+
+    loading.innerText = "";
+    locationContainer.innerHTML = "";
+    dateContainter.innerHTML = "";
 
     if (!response.ok) {
       throw new Error("Failed to fetch weather data");
@@ -48,7 +55,6 @@ const getWeatherInfo = async (location) => {
         dateContainter.appendChild(dateAndTemp.cloneNode(true));
       });
     };
-
     displayDays(responseData);
     displayAddress(responseData);
   } catch (error) {
