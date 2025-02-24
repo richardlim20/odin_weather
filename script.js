@@ -3,6 +3,8 @@ const submit = document.getElementById("submit");
 submit.addEventListener("click", () => {
   getWeatherInfo(inputLocation.value);
 });
+const locationContainer = document.getElementById("location-container");
+const dateContainter = document.getElementById("date-container");
 
 const getWeatherInfo = async (location) => {
   try {
@@ -15,6 +17,7 @@ const getWeatherInfo = async (location) => {
     }
 
     const responseData = await response.json();
+    // console.log(responseData)
 
     // get and display address
     const getAddress = (response) => ({
@@ -24,8 +27,14 @@ const getWeatherInfo = async (location) => {
 
     const displayAddress = (response) => {
       const { responseAddress, responseResolvedAddress } = getAddress(response);
-      console.log(responseAddress);
-      console.log(responseResolvedAddress);
+      const locationAddress = document.createElement("div");
+      const locationResolvedAddress = document.createElement("div");
+
+      locationAddress.innerText = responseAddress;
+      locationResolvedAddress.innerText = responseResolvedAddress;
+
+      locationContainer.appendChild(locationAddress);
+      locationContainer.appendChild(locationResolvedAddress);
     };
 
     // Get and display days
@@ -33,11 +42,10 @@ const getWeatherInfo = async (location) => {
 
     const displayDays = (response) => {
       const responseDays = getDays(response);
-      console.log(responseDays);
       responseDays.forEach((day) => {
-        console.log(
-          `Date: ${day.datetime} Max: ${day.tempmax} Min: ${day.tempmin}`
-        );
+        const dateAndTemp = document.createElement("div");
+        dateAndTemp.innerText = `Date: ${day.datetime} Max: ${day.tempmax} Min: ${day.tempmin}`;
+        dateContainter.appendChild(dateAndTemp.cloneNode(true));
       });
     };
 
