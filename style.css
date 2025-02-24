@@ -1,5 +1,61 @@
+*{
+  margin: 0px 4px;
+}
 .resolved-address{
   text-align: center;
   font-weight: bold;
   font-size: larger
+}
+
+header{
+  grid-area: header;
+  padding: 1rem;
+  margin: 1rem 0rem;
+}
+
+header > h1 {
+  text-align: center;
+  margin-bottom: 1rem;
+}
+
+#input-container {
+  display: flex;
+  justify-content: center;
+}
+
+#input-location {
+  flex-grow: 1;
+}
+
+#location-container {
+  grid-area: main;
+}
+
+#date-container {
+  grid-area: sidebar;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+
+#current-day-container {
+  grid-area: section;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+#air-conditions {
+  grid-area: article;
+}
+#grid-container {
+  height: 100vh;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  grid-template-rows: 1fr 4fr 4fr 4fr;
+  grid-template-areas: 
+    "header header header header"
+    "main main main sidebar"
+    "section section section sidebar"
+    "article article article sidebar";
 }

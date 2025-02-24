@@ -6,6 +6,7 @@ submit.addEventListener("click", () => {
 const locationContainer = document.getElementById("location-container");
 const dateContainter = document.getElementById("date-container");
 const currentDayContainer = document.getElementById("current-day-container");
+const airConditions = document.getElementById("air-conditions");
 
 const getWeatherInfo = async (location) => {
   try {
