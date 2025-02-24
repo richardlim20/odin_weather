@@ -4,55 +4,46 @@ submit.addEventListener("click", () => {
   getWeatherInfo(inputLocation.value);
 });
 
-const getWeatherInfo = (location) => {
-  fetch(
-    `https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/${location}?unitGroup=metric&key=KR7QNXQQLPNJN5WYLDDYF2JJW&contentType=json`
-  )
-    //Turns into js object
-    .then(
-      (getObject = (response) => {
-        return response.json();
-      })
-    )
-    .then(
-      (getAllInfo = (response) => {
-        //Logs all responses
-        console.log(response);
-
-        //Logs addresses
-        getAddress = (response) => {
-          let responseAddress = response.address;
-          let responseResolvedAddress = response.resolvedAddress;
-          console.log(responseAddress);
-          console.log(responseResolvedAddress);
-          return responseAddress, responseResolvedAddress;
-        };
-
-        //Logs dates and temperatures
-        getDays = (response) => {
-          let responseDays = response.days;
-          console.log(responseDays);
-          responseDays.forEach((day) => {
-            console.log(
-              "Date: " +
-                day.datetime +
-                " Max: " +
-                day.tempmax +
-                " Min: " +
-                day.tempmin
-            );
-          });
-          return responseDays;
-        };
-        getDays(response);
-        getAddress(response);
-      })
-    )
-    .catch(
-      (catchError = (err) => {
-        console.log("error");
-      })
+const getWeatherInfo = async (location) => {
+  try {
+    const response = await fetch(
+      `https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/${location}?unitGroup=metric&key=KR7QNXQQLPNJN5WYLDDYF2JJW&contentType=json`
     );
-};
 
-getWeatherInfo();
+    if (!response.ok) {
+      throw new Error("Failed to fetch weather data");
+    }
+
+    const responseData = await response.json();
+
+    // get and display address
+    const getAddress = (response) => ({
+      responseAddress: response.address,
+      responseResolvedAddress: response.resolvedAddress,
+    });
+
+    const displayAddress = (response) => {
+      const { responseAddress, responseResolvedAddress } = getAddress(response);
+      console.log(responseAddress);
+      console.log(responseResolvedAddress);
+    };
+
+    // Get and display days
+    const getDays = (response) => response.days;
+
+    const displayDays = (response) => {
+      const responseDays = getDays(response);
+      console.log(responseDays);
+      responseDays.forEach((day) => {
+        console.log(
+          `Date: ${day.datetime} Max: ${day.tempmax} Min: ${day.tempmin}`
+        );
+      });
+    };
+
+    displayDays(responseData);
+    displayAddress(responseData);
+  } catch (error) {
+    console.error("Error fetching weather data:", error.message);
+  }
+};
