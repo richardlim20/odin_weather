@@ -1,6 +1,12 @@
-const getWeatherInfo = () => {
+const inputLocation = document.getElementById("input-location");
+const submit = document.getElementById("submit");
+submit.addEventListener("click", () => {
+  getWeatherInfo(inputLocation.value);
+});
+
+const getWeatherInfo = (location) => {
   fetch(
-    "https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/melbourne?unitGroup=metric&key=KR7QNXQQLPNJN5WYLDDYF2JJW&contentType=json"
+    `https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/${location}?unitGroup=metric&key=KR7QNXQQLPNJN5WYLDDYF2JJW&contentType=json`
   )
     //Turns into js object
     .then(
