@@ -91,7 +91,15 @@ header > h1 {
   background-color: var(--primary);
   border-radius: var(--rounded);
   padding: 2rem;
+  justify-content: space-evenly;
 }
+
+.hour-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+}
+
 
 #air-conditions {
   grid-area: article;

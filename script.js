@@ -42,16 +42,13 @@ const getWeatherInfo = async (location) => {
           iconSrc = "images/partially-cloudy-icon.png";
           break;
         case "rain, partially":
-          iconSrc =
-            "images/partially-rainy-icon.webp";
+          iconSrc = "images/partially-rainy-icon.webp";
           break;
         case "rain, overcast":
-          iconSrc =
-            "images/rainy-icon.webp";
+          iconSrc = "images/rainy-icon.webp";
           break;
         case "rain, partially cloudy":
-          iconSrc =
-            "images/partially-rainy-icon.webp";
+          iconSrc = "images/partially-rainy-icon.webp";
           break;
       }
       return iconSrc;
@@ -195,6 +192,8 @@ const getWeatherInfo = async (location) => {
       }
       selectedHours.forEach((hour) => {
         const { convertedString } = convertHourFormat(hour.datetime);
+        const currentHourContainer = document.createElement("div");
+        currentHourContainer.classList.add("hour-container");
         const currentDayHour = document.createElement("div");
         currentDayHour.classList.add("current-day-hour");
         currentDayHour.innerText = convertedString;
@@ -212,9 +211,10 @@ const getWeatherInfo = async (location) => {
         currentHourTemp.textContent = hour.temp;
 
         console.log(hour);
-        currentDayContainer.appendChild(currentDayHour.cloneNode(true));
-        currentDayContainer.appendChild(currentHourCondition.cloneNode(true));
-        currentDayContainer.appendChild(currentHourTemp.cloneNode(true));
+        currentHourContainer.appendChild(currentDayHour.cloneNode(true));
+        currentHourContainer.appendChild(currentHourCondition.cloneNode(true));
+        currentHourContainer.appendChild(currentHourTemp.cloneNode(true));
+        currentDayContainer.appendChild(currentHourContainer.cloneNode(true));
       });
     };
 
