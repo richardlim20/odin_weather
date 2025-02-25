@@ -28,6 +28,35 @@ const getWeatherInfo = async (location) => {
     const responseData = await response.json();
     console.log(responseData);
 
+    const displayConditionIcon = (condition) => {
+      let iconSrc;
+
+      switch (condition.toLowerCase()) {
+        case "clear":
+          iconSrc = "images/clear-icon.png";
+          break;
+        case "overcast":
+          iconSrc = "images/overcast-icon.png";
+          break;
+        case "partially cloudy":
+          iconSrc = "images/partially-cloudy-icon.png";
+          break;
+        case "rain, partially":
+          iconSrc =
+            "images/partially-rainy-icon.webp";
+          break;
+        case "rain, overcast":
+          iconSrc =
+            "images/rainy-icon.webp";
+          break;
+        case "rain, partially cloudy":
+          iconSrc =
+            "images/partially-rainy-icon.webp";
+          break;
+      }
+      return iconSrc;
+    };
+
     const clearClassElement = (className) => {
       document
         .querySelectorAll(className)
@@ -45,12 +74,16 @@ const getWeatherInfo = async (location) => {
     //Create weather detail elements
     const currentTemp = document.createElement("div");
     currentTemp.textContent = `${responseData.currentConditions.temp}C`;
-    const currentCondition = document.createElement("div");
-    currentCondition.textContent = responseData.currentConditions.conditions;
+    const currentCondition = document.createElement("img");
+    const conditionText = responseData.currentConditions.conditions;
+    currentCondition.textContent = conditionText;
+    currentCondition.setAttribute("src", displayConditionIcon(conditionText));
+    currentCondition.setAttribute("alt", conditionText);
+    currentCondition.setAttribute("title", conditionText);
     const currentPrecipprob = document.createElement("div");
     currentPrecipprob.textContent = responseData.precipprob
-      ? `${responseData.precipprob}%`
-      : "0%";
+      ? `Chance of rain: ${responseData.precipprob}%`
+      : "Chance of rain: 0%";
 
     // get and display address
     const getAddress = (response) => response.resolvedAddress;
@@ -60,14 +93,19 @@ const getWeatherInfo = async (location) => {
 
       const locationResolvedAddress = document.createElement("div");
       locationResolvedAddress.classList.add("resolved-address");
+      const locationFlexContainer = document.createElement("div");
+      locationFlexContainer.classList.add("location-flex-1");
+      const locationFlexContainer2 = document.createElement("div");
 
       //Clear and add content
       clearContainer(locationContainer);
       locationResolvedAddress.textContent = responseResolvedAddress;
-      locationContainer.appendChild(locationResolvedAddress);
-      locationContainer.appendChild(currentTemp);
-      locationContainer.appendChild(currentPrecipprob);
-      locationContainer.appendChild(currentCondition);
+      locationContainer.appendChild(locationFlexContainer);
+      locationContainer.appendChild(locationFlexContainer2);
+      locationFlexContainer.appendChild(locationResolvedAddress);
+      locationFlexContainer.appendChild(currentPrecipprob);
+      locationFlexContainer.appendChild(currentTemp);
+      locationFlexContainer2.appendChild(currentCondition);
     };
 
     // Get and display days
@@ -84,15 +122,21 @@ const getWeatherInfo = async (location) => {
       clearClassElement(".date-item");
       // Get current date in YYYY-MM-DD format
       const today = new Date().toISOString().split("T")[0];
-      responseDays.forEach((day) => {
+      responseDays.slice(0, 7).forEach((day) => {
         //Create date elements
         const dateDay = document.createElement("div");
         dateDay.classList.add("date-item");
         dateDay.textContent =
           day.datetime === today ? "Today" : getDayOfWeek(day.datetime);
-        const dateCondition = document.createElement("div");
+        const dateCondition = document.createElement("img");
         dateCondition.classList.add("date-item");
-        dateCondition.textContent = day.conditions;
+        const dateConditionText = day.conditions;
+        dateCondition.setAttribute(
+          "src",
+          displayConditionIcon(dateConditionText)
+        );
+        dateCondition.setAttribute("alt", dateConditionText);
+        dateCondition.setAttribute("title", dateConditionText);
         const dateMax = document.createElement("div");
         dateMax.classList.add("date-item");
         dateMax.textContent = day.tempmax;
@@ -154,9 +198,15 @@ const getWeatherInfo = async (location) => {
         const currentDayHour = document.createElement("div");
         currentDayHour.classList.add("current-day-hour");
         currentDayHour.innerText = convertedString;
-        const currentHourCondition = document.createElement("div");
+        const currentHourCondition = document.createElement("img");
         currentHourCondition.classList.add("current-day-hour");
-        currentHourCondition.textContent = hour.conditions;
+        const currentHourConditionText = hour.conditions;
+        currentHourCondition.setAttribute(
+          "src",
+          displayConditionIcon(currentHourConditionText)
+        );
+        currentHourCondition.setAttribute("alt", currentHourConditionText);
+        currentHourCondition.setAttribute("title", currentHourConditionText);
         const currentHourTemp = document.createElement("div");
         currentHourTemp.classList.add("current-day-hour");
         currentHourTemp.textContent = hour.temp;
@@ -186,4 +236,4 @@ const getWeatherInfo = async (location) => {
   }
 };
 
-getWeatherInfo("melbourne");
+getWeatherInfo("japan");
