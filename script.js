@@ -123,6 +123,7 @@ const getWeatherInfo = async (location) => {
         //Create date elements
         const dateFlexContainer = document.createElement("div");
         dateFlexContainer.classList.add("date-flex-container");
+        dateFlexContainer.classList.add("date-item");
         const dateDay = document.createElement("div");
         dateDay.classList.add("date-item");
         dateDay.textContent =
@@ -193,6 +194,7 @@ const getWeatherInfo = async (location) => {
         const { convertedString } = convertHourFormat(hour.datetime);
         const currentHourContainer = document.createElement("div");
         currentHourContainer.classList.add("hour-container");
+        currentHourContainer.classList.add("current-day-hour");
         const currentDayHour = document.createElement("div");
         currentDayHour.classList.add("current-day-hour");
         currentDayHour.innerText = convertedString;
@@ -219,11 +221,18 @@ const getWeatherInfo = async (location) => {
 
     const displayAirConditions = (response) => {
       const feelsLike = document.createElement("div");
-      feelsLike.textContent = `Feels Like: ${response.currentConditions.feelslike}`
+      feelsLike.classList.add("air-conditions-item");
+      feelsLike.textContent = `Feels Like: ${response.currentConditions.feelslike}`;
       const currentWind = document.createElement("div");
+      currentWind.classList.add("air-conditions-item");
       currentWind.textContent = `Wind Speed: ${response.currentConditions.windspeed}`;
       const uvIndex = document.createElement("div");
-      uvIndex.textContent = `UV Index: ${response.currentConditions.uvindex}`
+      uvIndex.classList.add("air-conditions-item");
+      uvIndex.textContent = `UV Index: ${response.currentConditions.uvindex}`;
+      currentPrecipprob.classList.add("air-conditions-item");
+
+      clearClassElement(".air-conditions-item");
+      airConditions.appendChild(airConditionsHeader);
       airConditions.appendChild(feelsLike);
       airConditions.appendChild(currentWind);
       airConditions.appendChild(currentPrecipprob.cloneNode(true));
