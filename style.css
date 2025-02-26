@@ -43,7 +43,26 @@ header > h1 {
   flex-grow: 1;
   background-color: var(--primary);
   border-radius: var(--rounded);
-  padding: 0.5rem;
+  padding: 0.5rem 1rem;
+  color: var(--secondary);
+  border: none;
+}
+
+#submit {
+  background-color: var(--primary);
+  border-radius: var(--rounded);
+  border: none;
+  padding: 0.5rem 1rem;
+  color: var(--secondary);
+}
+
+#submit:active {
+  background-color: var(--highlight);
+  opacity: 20;
+}
+
+#submit:hover {
+  background-color: var(--highlight);
 }
 
 #location-container {
@@ -51,6 +70,13 @@ header > h1 {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  padding: 0rem 2rem;
+}
+
+#location-container > div > img {
+  margin-right: 4rem;
+  height: 150px;
+  width: 150px;
 }
 
 .location-flex-1 {
@@ -101,20 +127,35 @@ header > h1 {
   margin-left: auto;
 }
 
+.date-flex-container > :first-child {
+  color: var(--tertiary);
+}
+
 #current-day-container {
   grid-area: section;
-  display: flex;
-  flex-wrap: wrap;
   background-color: var(--primary);
   border-radius: var(--rounded);
-  padding: 2rem;
-  justify-content: space-evenly;
+  padding: 0rem 4rem;
+}
+
+#current-day-container > h3{
+  margin-top: 2rem;
+}
+
+.current-day-flex-container {
+  display: flex;
+  justify-content: space-between
 }
 
 .hour-container {
   display: flex;
   flex-direction: column;
   justify-content: space-around;
+  gap: 0.5rem;
+}
+
+.hour-container >:first-child {
+  color: var(--tertiary);
 }
 
 
@@ -122,8 +163,25 @@ header > h1 {
   grid-area: article;
   background-color: var(--primary);
   border-radius: var(--rounded);
-  padding: 2rem;
+  padding: 0rem 4rem;
 }
+
+#air-conditions > h3 {
+  margin-top: 2rem;
+}
+
+.air-conditions-flex-container {
+  display: flex;
+  height: 50%;
+  justify-content: space-around;
+}
+
+.air-conditions-flex-container > div {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+}
+
 #grid-container {
   height: 100vh;
   display: grid;

@@ -3,6 +3,11 @@ const submit = document.getElementById("submit");
 submit.addEventListener("click", () => {
   getWeatherInfo(inputLocation.value);
 });
+inputLocation.addEventListener("keypress", (e) => {
+  if (e.key === "Enter") {
+    getWeatherInfo(inputLocation.value);
+  }
+});
 const locationContainer = document.getElementById("location-container");
 const dateContainer = document.getElementById("date-container");
 const currentDayContainer = document.getElementById("current-day-container");
@@ -67,6 +72,12 @@ const getWeatherInfo = async (location) => {
         }
       }
     };
+
+    const appendHeader = (container, header) => {
+      if (!container.hasChildNodes()) {
+        container.appendChild(header);
+      }
+    }
 
     //Create weather detail elements
     const currentTemp = document.createElement("div");
@@ -141,9 +152,7 @@ const getWeatherInfo = async (location) => {
         dateMaxMin.classList.add("date-item");
         dateMaxMin.textContent = `${day.tempmax} / ${day.tempmin}`;
 
-        if (!dateContainer.hasChildNodes()) {
-          dateContainer.appendChild(dateHeader);
-        }
+        appendHeader(dateContainer, dateHeader);
         dateFlexContainer.appendChild(dateDay.cloneNode(true));
         dateFlexContainer.appendChild(dateCondition.cloneNode(true));
         dateFlexContainer.appendChild(dateMaxMin.cloneNode(true));
@@ -190,6 +199,14 @@ const getWeatherInfo = async (location) => {
           selectedHours.push(allHours[hourIndex]);
         }
       }
+
+      const currentDayHeader = document.createElement("h3");
+      currentDayHeader.textContent = "Today's Forecast";
+      appendHeader(currentDayContainer, currentDayHeader);
+      const currentDayFlexContainer = document.createElement("div");
+      currentDayFlexContainer.classList.add("current-day-flex-container")
+      currentDayContainer.appendChild(currentDayFlexContainer)
+
       selectedHours.forEach((hour) => {
         const { convertedString } = convertHourFormat(hour.datetime);
         const currentHourContainer = document.createElement("div");
@@ -215,11 +232,22 @@ const getWeatherInfo = async (location) => {
         currentHourContainer.appendChild(currentDayHour.cloneNode(true));
         currentHourContainer.appendChild(currentHourCondition.cloneNode(true));
         currentHourContainer.appendChild(currentHourTemp.cloneNode(true));
-        currentDayContainer.appendChild(currentHourContainer.cloneNode(true));
+        currentDayFlexContainer.appendChild(currentHourContainer.cloneNode(true));
       });
     };
 
     const displayAirConditions = (response) => {
+      const airConditionsHeader = document.createElement("h3");
+      airConditionsHeader.classList.add("air-conditions-header");
+      airConditionsHeader.textContent = "Air Conditions";
+      const airConditionsFlexContainer = document.createElement("div");
+      airConditionsFlexContainer.classList.add("air-conditions-flex-container");
+      const airConditionsFlex1 = document.createElement("div");
+      const airConditionsFlex2 = document.createElement("div");
+      airConditionsFlexContainer.appendChild(airConditionsFlex1);
+      airConditionsFlexContainer.appendChild(airConditionsFlex2);
+
+      
       const feelsLike = document.createElement("div");
       feelsLike.classList.add("air-conditions-item");
       feelsLike.textContent = `Feels Like: ${response.currentConditions.feelslike}`;
@@ -232,11 +260,12 @@ const getWeatherInfo = async (location) => {
       currentPrecipprob.classList.add("air-conditions-item");
 
       clearClassElement(".air-conditions-item");
-      airConditions.appendChild(airConditionsHeader);
-      airConditions.appendChild(feelsLike);
-      airConditions.appendChild(currentWind);
-      airConditions.appendChild(currentPrecipprob.cloneNode(true));
-      airConditions.appendChild(uvIndex);
+      appendHeader(airConditions, airConditionsHeader);
+      airConditionsFlex1.appendChild(feelsLike);
+      airConditionsFlex1.appendChild(currentWind);
+      airConditionsFlex2.appendChild(currentPrecipprob.cloneNode(true));
+      airConditionsFlex2.appendChild(uvIndex);
+      airConditions.appendChild(airConditionsFlexContainer);
     };
 
     displayDays(responseData);
@@ -248,4 +277,4 @@ const getWeatherInfo = async (location) => {
   }
 };
 
-getWeatherInfo("japan");
+getWeatherInfo("Melbourne")
