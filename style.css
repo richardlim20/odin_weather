@@ -83,6 +83,23 @@ header > h1 {
   padding: 2rem;
 }
 
+.date-flex-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-rows: auto;
+  border-bottom: 1px solid #bbb;
+  padding-bottom: 1rem;
+  justify-content: center;
+  align-items: center;
+}
+
+.date-flex-container:not(:has(~ .date-flex-container)){
+  border-bottom: none;
+}
+
+.date-flex-container > :last-child {
+  margin-left: auto;
+}
 
 #current-day-container {
   grid-area: section;

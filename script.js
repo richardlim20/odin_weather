@@ -121,6 +121,8 @@ const getWeatherInfo = async (location) => {
       const today = new Date().toISOString().split("T")[0];
       responseDays.slice(0, 7).forEach((day) => {
         //Create date elements
+        const dateFlexContainer = document.createElement("div");
+        dateFlexContainer.classList.add("date-flex-container");
         const dateDay = document.createElement("div");
         dateDay.classList.add("date-item");
         dateDay.textContent =
@@ -134,20 +136,17 @@ const getWeatherInfo = async (location) => {
         );
         dateCondition.setAttribute("alt", dateConditionText);
         dateCondition.setAttribute("title", dateConditionText);
-        const dateMax = document.createElement("div");
-        dateMax.classList.add("date-item");
-        dateMax.textContent = day.tempmax;
-        const dateMin = document.createElement("div");
-        dateMin.classList.add("date-item");
-        dateMin.textContent = day.tempmin;
+        const dateMaxMin = document.createElement("div");
+        dateMaxMin.classList.add("date-item");
+        dateMaxMin.textContent = `${day.tempmax} / ${day.tempmin}`;
 
         if (!dateContainer.hasChildNodes()) {
           dateContainer.appendChild(dateHeader);
         }
-        dateContainer.appendChild(dateDay.cloneNode(true));
-        dateContainer.appendChild(dateCondition.cloneNode(true));
-        dateContainer.appendChild(dateMax.cloneNode(true));
-        dateContainer.appendChild(dateMin.cloneNode(true));
+        dateFlexContainer.appendChild(dateDay.cloneNode(true));
+        dateFlexContainer.appendChild(dateCondition.cloneNode(true));
+        dateFlexContainer.appendChild(dateMaxMin.cloneNode(true));
+        dateContainer.appendChild(dateFlexContainer.cloneNode(true));
       });
     };
 
@@ -219,12 +218,16 @@ const getWeatherInfo = async (location) => {
     };
 
     const displayAirConditions = (response) => {
+      const feelsLike = document.createElement("div");
+      feelsLike.textContent = `Feels Like: ${response.currentConditions.feelslike}`
       const currentWind = document.createElement("div");
-      currentWind.textContent = response.currentConditions.windspeed;
-      airConditions.appendChild(currentCondition.cloneNode(true));
-      airConditions.appendChild(currentTemp.cloneNode(true));
+      currentWind.textContent = `Wind Speed: ${response.currentConditions.windspeed}`;
+      const uvIndex = document.createElement("div");
+      uvIndex.textContent = `UV Index: ${response.currentConditions.uvindex}`
+      airConditions.appendChild(feelsLike);
       airConditions.appendChild(currentWind);
       airConditions.appendChild(currentPrecipprob.cloneNode(true));
+      airConditions.appendChild(uvIndex);
     };
 
     displayDays(responseData);
