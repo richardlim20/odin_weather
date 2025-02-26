@@ -197,3 +197,16 @@ header > h1 {
 #grid-container > div{
   margin: 1rem;
 }
+
+#loading {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: var(--highlight);
+  color: white;
+  padding: 2rem 4rem;
+  border-radius: var(--rounded);
+  font-size: 1.2rem;
+  display: none;
+}
