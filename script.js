@@ -34,11 +34,9 @@ const getWeatherInfo = async (location) => {
     const responseData = await response.json();
     updateUI(responseData);
     console.log(responseData);
-
   } catch (error) {
     console.error("Error fetching weather data:", error.message);
-  }
-  finally {
+  } finally {
     loading.style.display = "none"; // Hide loading dialog after fetching
   }
 };
@@ -49,16 +47,18 @@ const updateUI = (response) => {
   displayDays(response);
   displayHours(response);
   displayAirConditions(response);
-}
-
-const getAddress = (response) => response.resolvedAddress;
+};
 
 const displayAddress = (response) => {
-  const responseResolvedAddress = getAddress(response);
+  const responseResolvedAddress = response.resolvedAddress;
   const currentTemp = document.createElement("div");
   currentTemp.textContent = `${response.currentConditions.temp}C`;
   const conditionText = response.currentConditions.conditions;
-  const currentCondition = createImage(displayConditionIcon(conditionText), conditionText, conditionText);
+  const currentCondition = createImage(
+    displayConditionIcon(conditionText),
+    conditionText,
+    conditionText
+  );
   const locationResolvedAddress = document.createElement("div");
   locationResolvedAddress.classList.add("resolved-address");
   const locationFlexContainer = document.createElement("div");
@@ -77,15 +77,12 @@ const displayAddress = (response) => {
 };
 
 // Get and display days
-const getDays = (response) => response.days;
 const displayDays = (response) => {
   const getDayOfWeek = (dateString) => {
     const date = new Date(dateString);
-    return new Intl.DateTimeFormat("en-US", { weekday: "short" }).format(
-      date
-    );
+    return new Intl.DateTimeFormat("en-US", { weekday: "short" }).format(date);
   };
-  const responseDays = getDays(response);
+  const responseDays = response.days;
   //Clears all date items but leaves header
   clearClassElement(".date-item");
   // Get current date in YYYY-MM-DD format
@@ -100,7 +97,11 @@ const displayDays = (response) => {
     dateDay.textContent =
       day.datetime === today ? "Today" : getDayOfWeek(day.datetime);
     const dateConditionText = day.conditions;
-    const dateCondition = createImage(displayConditionIcon(dateConditionText), dateConditionText, dateConditionText);
+    const dateCondition = createImage(
+      displayConditionIcon(dateConditionText),
+      dateConditionText,
+      dateConditionText
+    );
     dateCondition.classList.add("date-item");
     const dateMaxMin = document.createElement("div");
     dateMaxMin.classList.add("date-item");
@@ -127,8 +128,8 @@ const displayHours = (response) => {
       hourInt: hourInt,
     };
   };
-  const currentDay = getDays(response)[0];
-  const nextDay = getDays(response)[1];
+  const currentDay = response.days[0];
+  const nextDay = response.days[1];
   const allHours = [...currentDay.hours, ...nextDay.hours];
   clearClassElement(".current-day-hour");
 
@@ -158,8 +159,8 @@ const displayHours = (response) => {
   currentDayHeader.textContent = "Today's Forecast";
   appendHeader(currentDayContainer, currentDayHeader);
   const currentDayFlexContainer = document.createElement("div");
-  currentDayFlexContainer.classList.add("current-day-flex-container")
-  currentDayContainer.appendChild(currentDayFlexContainer)
+  currentDayFlexContainer.classList.add("current-day-flex-container");
+  currentDayContainer.appendChild(currentDayFlexContainer);
 
   selectedHours.forEach((hour) => {
     const { convertedString } = convertHourFormat(hour.datetime);
@@ -170,7 +171,11 @@ const displayHours = (response) => {
     currentDayHour.classList.add("current-day-hour");
     currentDayHour.innerText = convertedString;
     const currentHourConditionText = hour.conditions;
-    const currentHourCondition = createImage(displayConditionIcon(currentHourConditionText), currentHourConditionText, currentHourConditionText)
+    const currentHourCondition = createImage(
+      displayConditionIcon(currentHourConditionText),
+      currentHourConditionText,
+      currentHourConditionText
+    );
     currentHourCondition.classList.add("current-day-hour");
     const currentHourTemp = document.createElement("div");
     currentHourTemp.classList.add("current-day-hour");
@@ -196,7 +201,6 @@ const displayAirConditions = (response) => {
   airConditionsFlexContainer.appendChild(airConditionsFlex1);
   airConditionsFlexContainer.appendChild(airConditionsFlex2);
 
-  
   const feelsLike = document.createElement("div");
   feelsLike.classList.add("air-conditions-item");
   feelsLike.textContent = `Feels Like: ${response.currentConditions.feelslike}`;
@@ -252,9 +256,7 @@ const createImage = (src, alt) => {
 };
 
 const clearClassElement = (className) => {
-  document
-    .querySelectorAll(className)
-    .forEach((element) => element.remove());
+  document.querySelectorAll(className).forEach((element) => element.remove());
 };
 
 const clearContainer = (container) => {
@@ -269,16 +271,14 @@ const appendHeader = (container, header) => {
   if (!container.hasChildNodes()) {
     container.appendChild(header);
   }
-}
+};
 
 const getCurrentPrecip = (response) => {
   const precip = document.createElement("div");
   precip.textContent = response.precipprob
     ? `Chance of rain: ${response.precipprob}%`
     : "Chance of rain: 0%";
-    return precip;
-}
+  return precip;
+};
 
-
-
-getWeatherInfo("Melbourne")
+getWeatherInfo("Melbourne");
