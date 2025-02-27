@@ -69,17 +69,17 @@ const displayWeeklyForecast = (response) => {
     return new Intl.DateTimeFormat("en-US", { weekday: "short" }).format(date);
   };
   const responseDays = response.days;
-  //Clears all date items but leaves header
-  clearClassElement(".date-item");
+
+  clearContainer(dateContainer);
+  appendHeader(dateContainer, dateHeader);
+  
   // Get current date in YYYY-MM-DD format
   const today = new Date().toISOString().split("T")[0];
   responseDays.slice(0, 7).forEach((day) => {
     //Create date elements
     const dateFlexContainer = document.createElement("div");
     dateFlexContainer.classList.add("date-flex-container");
-    dateFlexContainer.classList.add("date-item");
     const dateDay = document.createElement("div");
-    dateDay.classList.add("date-item");
     dateDay.textContent =
       day.datetime === today ? "Today" : getDayOfWeek(day.datetime);
     const dateConditionText = day.conditions;
@@ -88,12 +88,9 @@ const displayWeeklyForecast = (response) => {
       dateConditionText,
       dateConditionText
     );
-    dateCondition.classList.add("date-item");
     const dateMaxMin = document.createElement("div");
-    dateMaxMin.classList.add("date-item");
     dateMaxMin.textContent = `${day.tempmax} / ${day.tempmin}`;
 
-    appendHeader(dateContainer, dateHeader);
     dateFlexContainer.appendChild(dateDay.cloneNode(true));
     dateFlexContainer.appendChild(dateCondition.cloneNode(true));
     dateFlexContainer.appendChild(dateMaxMin.cloneNode(true));
@@ -117,7 +114,6 @@ const displayHourlyForecast = (response) => {
   const currentDay = response.days[0];
   const nextDay = response.days[1];
   const allHours = [...currentDay.hours, ...nextDay.hours];
-  clearClassElement(".current-day-hour");
 
   const currentHour = document.createElement("div");
   const { convertedString, hourInt } = convertHourFormat(
@@ -143,6 +139,8 @@ const displayHourlyForecast = (response) => {
 
   const currentDayHeader = document.createElement("h3");
   currentDayHeader.textContent = "Today's Forecast";
+
+  clearContainer(currentDayContainer);
   appendHeader(currentDayContainer, currentDayHeader);
   const currentDayFlexContainer = document.createElement("div");
   currentDayFlexContainer.classList.add("current-day-flex-container");
@@ -152,9 +150,7 @@ const displayHourlyForecast = (response) => {
     const { convertedString } = convertHourFormat(hour.datetime);
     const currentHourContainer = document.createElement("div");
     currentHourContainer.classList.add("hour-container");
-    currentHourContainer.classList.add("current-day-hour");
     const currentDayHour = document.createElement("div");
-    currentDayHour.classList.add("current-day-hour");
     currentDayHour.innerText = convertedString;
     const currentHourConditionText = hour.conditions;
     const currentHourCondition = createImage(
@@ -162,9 +158,7 @@ const displayHourlyForecast = (response) => {
       currentHourConditionText,
       currentHourConditionText
     );
-    currentHourCondition.classList.add("current-day-hour");
     const currentHourTemp = document.createElement("div");
-    currentHourTemp.classList.add("current-day-hour");
     currentHourTemp.textContent = hour.temp;
 
     currentHourContainer.appendChild(currentDayHour.cloneNode(true));
@@ -180,23 +174,19 @@ const displayAirConditions = (response) => {
   airConditionsHeader.textContent = "Air Conditions";
   const airConditionsFlexContainer = document.createElement("div");
   airConditionsFlexContainer.classList.add("air-conditions-flex-container");
-  airConditionsFlexContainer.classList.add("air-conditions-item");
   const airConditionsFlex1 = document.createElement("div");
   const airConditionsFlex2 = document.createElement("div");
   airConditionsFlexContainer.appendChild(airConditionsFlex1);
   airConditionsFlexContainer.appendChild(airConditionsFlex2);
 
   const feelsLike = document.createElement("div");
-  feelsLike.classList.add("air-conditions-item");
   feelsLike.textContent = `Feels Like: ${response.currentConditions.feelslike}`;
   const currentWind = document.createElement("div");
-  currentWind.classList.add("air-conditions-item");
   currentWind.textContent = `Wind Speed: ${response.currentConditions.windspeed}`;
   const uvIndex = document.createElement("div");
-  uvIndex.classList.add("air-conditions-item");
   uvIndex.textContent = `UV Index: ${response.currentConditions.uvindex}`;
 
-  clearClassElement(".air-conditions-item");
+  clearContainer(airConditions);
   appendHeader(airConditions, airConditionsHeader);
   airConditionsFlex1.appendChild(feelsLike);
   airConditionsFlex1.appendChild(currentWind);
@@ -240,9 +230,6 @@ const createImage = (src, alt) => {
   return img;
 };
 
-const clearClassElement = (className) => {
-  document.querySelectorAll(className).forEach((element) => element.remove());
-};
 
 const clearContainer = (container) => {
   if (container.hasChildNodes()) {
