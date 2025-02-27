@@ -33,7 +33,6 @@ const getWeatherInfo = async (location) => {
 
     const responseData = await response.json();
     updateUI(responseData);
-    console.log(responseData);
   } catch (error) {
     console.error("Error fetching weather data:", error.message);
   } finally {
@@ -43,13 +42,13 @@ const getWeatherInfo = async (location) => {
 
 //Update entire UI
 const updateUI = (response) => {
-  displayAddress(response);
-  displayDays(response);
-  displayHours(response);
+  displayCurrentForecast(response);
+  displayWeeklyForecast(response);
+  displayHourlyForecast(response);
   displayAirConditions(response);
 };
 
-const displayAddress = (response) => {
+const displayCurrentForecast = (response) => {
   const responseResolvedAddress = response.resolvedAddress;
   const currentTemp = document.createElement("div");
   currentTemp.textContent = `${response.currentConditions.temp}C`;
@@ -77,7 +76,7 @@ const displayAddress = (response) => {
 };
 
 // Get and display days
-const displayDays = (response) => {
+const displayWeeklyForecast = (response) => {
   const getDayOfWeek = (dateString) => {
     const date = new Date(dateString);
     return new Intl.DateTimeFormat("en-US", { weekday: "short" }).format(date);
@@ -115,7 +114,7 @@ const displayDays = (response) => {
   });
 };
 
-const displayHours = (response) => {
+const displayHourlyForecast = (response) => {
   const convertHourFormat = (timeString) => {
     hour = timeString.slice(0, 2);
     const hourInt = parseInt(hour);
@@ -181,7 +180,6 @@ const displayHours = (response) => {
     currentHourTemp.classList.add("current-day-hour");
     currentHourTemp.textContent = hour.temp;
 
-    console.log(hour);
     currentHourContainer.appendChild(currentDayHour.cloneNode(true));
     currentHourContainer.appendChild(currentHourCondition.cloneNode(true));
     currentHourContainer.appendChild(currentHourTemp.cloneNode(true));
