@@ -10,25 +10,20 @@ dateHeader.innerText = "7 Day Forecast";
 const getWeatherInfo = async (location) => {
   try {
     const loading = document.getElementById("loading");
-    loading.style.display = "block";
-    loading.innerText = "Loading...";
-
+    showLoading(loading, "Loading...");
     const response = await fetch(
       `https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/${location}?unitGroup=metric&key=KR7QNXQQLPNJN5WYLDDYF2JJW&contentType=json`
     );
-
-    loading.innerText = "";
-
+    hideLoading(loading);
     if (!response.ok) {
       throw new Error("Failed to fetch weather data");
     }
-
     const responseData = await response.json();
     updateUI(responseData);
   } catch (error) {
     console.error("Error fetching weather data:", error.message);
   } finally {
-    loading.style.display = "none"; // Hide loading dialog after fetching
+    hideLoading(loading);
   }
 };
 
@@ -269,6 +264,16 @@ const getCurrentPrecip = (response) => {
     ? `Chance of rain: ${response.precipprob}%`
     : "Chance of rain: 0%";
   return precip;
+};
+
+const showLoading = (element, message) => {
+  element.style.display = "block";
+  element.innerText = message;
+};
+
+const hideLoading = (element) => {
+  element.style.display = "none";
+  element.innerText = "";
 };
 
 //Event Listeners
