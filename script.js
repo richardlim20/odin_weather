@@ -2,9 +2,7 @@ const getWeatherInfo = async (location) => {
   try {
     const loading = document.getElementById("loading");
     showLoading(loading, "Loading...");
-    const response = await fetch(
-      `https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/${location}?unitGroup=metric&key=KR7QNXQQLPNJN5WYLDDYF2JJW&contentType=json`
-    );
+    const response = await fetchWeatherData(location);
     hideLoading(loading);
     if (!response.ok) {
       throw new Error("Failed to fetch weather data");
@@ -17,6 +15,14 @@ const getWeatherInfo = async (location) => {
     hideLoading(loading);
   }
 };
+
+const fetchWeatherData = async (location) => {
+  const API_KEY = "KR7QNXQQLPNJN5WYLDDYF2JJW";
+  //TODO: Toggle button for celcius or fahrenheit
+  const unitGroup = "metric"
+  const url = `https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/${location}?unitGroup=${unitGroup}&key=${API_KEY}&contentType=json`;
+  return await fetch(url);
+}
 
 //Update entire UI
 const updateUI = (response) => {
