@@ -1,12 +1,3 @@
-const inputLocation = document.getElementById("input-location");
-const submit = document.getElementById("submit");
-const locationContainer = document.getElementById("location-container");
-const dateContainer = document.getElementById("date-container");
-const currentDayContainer = document.getElementById("current-day-container");
-const airConditions = document.getElementById("air-conditions");
-const dateHeader = document.createElement("h3");
-dateHeader.innerText = "7 Day Forecast";
-
 const getWeatherInfo = async (location) => {
   try {
     const loading = document.getElementById("loading");
@@ -36,6 +27,7 @@ const updateUI = (response) => {
 };
 
 const displayCurrentForecast = (response) => {
+  const locationContainer = document.getElementById("location-container");
   const responseResolvedAddress = response.resolvedAddress;
   const currentTemp = document.createElement("div");
   currentTemp.textContent = `${response.currentConditions.temp}C`;
@@ -69,14 +61,18 @@ const displayWeeklyForecast = (response) => {
     return new Intl.DateTimeFormat("en-US", { weekday: "short" }).format(date);
   };
   const responseDays = response.days;
+  const dateContainer = document.getElementById("date-container");
+  const dateHeader = document.createElement("h3");
+  dateHeader.innerText = "7 Day Forecast";
 
   clearContainer(dateContainer);
   appendHeader(dateContainer, dateHeader);
-  
+
   // Get current date in YYYY-MM-DD format
   const today = new Date().toISOString().split("T")[0];
+
+  //Create and append date elements
   responseDays.slice(0, 7).forEach((day) => {
-    //Create date elements
     const dateFlexContainer = document.createElement("div");
     dateFlexContainer.classList.add("date-flex-container");
     const dateDay = document.createElement("div");
@@ -111,6 +107,7 @@ const displayHourlyForecast = (response) => {
       hourInt: hourInt,
     };
   };
+  const currentDayContainer = document.getElementById("current-day-container");
   const currentDay = response.days[0];
   const nextDay = response.days[1];
   const allHours = [...currentDay.hours, ...nextDay.hours];
@@ -169,6 +166,7 @@ const displayHourlyForecast = (response) => {
 };
 
 const displayAirConditions = (response) => {
+  const airConditions = document.getElementById("air-conditions");
   const airConditionsHeader = document.createElement("h3");
   airConditionsHeader.classList.add("air-conditions-header");
   airConditionsHeader.textContent = "Air Conditions";
@@ -230,7 +228,6 @@ const createImage = (src, alt) => {
   return img;
 };
 
-
 const clearContainer = (container) => {
   if (container.hasChildNodes()) {
     while (container.firstChild) {
@@ -262,6 +259,9 @@ const hideLoading = (element) => {
   element.style.display = "none";
   element.innerText = "";
 };
+
+const inputLocation = document.getElementById("input-location");
+const submit = document.getElementById("submit");
 
 //Event Listeners
 submit.addEventListener("click", () => {
