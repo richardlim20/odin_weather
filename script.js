@@ -1,13 +1,5 @@
 const inputLocation = document.getElementById("input-location");
 const submit = document.getElementById("submit");
-submit.addEventListener("click", () => {
-  getWeatherInfo(inputLocation.value);
-});
-inputLocation.addEventListener("keypress", (e) => {
-  if (e.key === "Enter") {
-    getWeatherInfo(inputLocation.value);
-  }
-});
 const locationContainer = document.getElementById("location-container");
 const dateContainer = document.getElementById("date-container");
 const currentDayContainer = document.getElementById("current-day-container");
@@ -278,5 +270,15 @@ const getCurrentPrecip = (response) => {
     : "Chance of rain: 0%";
   return precip;
 };
+
+//Event Listeners
+submit.addEventListener("click", () => {
+  getWeatherInfo(inputLocation.value);
+});
+inputLocation.addEventListener("keypress", (e) => {
+  if (e.key === "Enter") {
+    getWeatherInfo(inputLocation.value);
+  }
+});
 
 getWeatherInfo("Melbourne");
