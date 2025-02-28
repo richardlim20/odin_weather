@@ -1,8 +1,8 @@
-const getWeatherInfo = async (location) => {
+const getWeatherInfo = async (location, unitGroup) => {
   try {
     const loading = document.getElementById("loading");
     showLoading(loading, "Loading...");
-    const response = await fetchWeatherData(location);
+    const response = await fetchWeatherData(location, unitGroup);
     hideLoading(loading);
     if (!response.ok) {
       throw new Error("Failed to fetch weather data");
@@ -16,13 +16,12 @@ const getWeatherInfo = async (location) => {
   }
 };
 
-const fetchWeatherData = async (location) => {
+const fetchWeatherData = async (location, unitGroup) => {
   const API_KEY = "KR7QNXQQLPNJN5WYLDDYF2JJW";
   //TODO: Toggle button for celcius or fahrenheit
-  const unitGroup = "metric"
   const url = `https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/${location}?unitGroup=${unitGroup}&key=${API_KEY}&contentType=json`;
   return await fetch(url);
-}
+};
 
 //Update entire UI
 const updateUI = (response) => {
@@ -36,7 +35,11 @@ const displayCurrentForecast = (response) => {
   const locationContainer = document.getElementById("location-container");
   const responseResolvedAddress = response.resolvedAddress;
   const currentTemp = document.createElement("div");
-  currentTemp.textContent = `${response.currentConditions.temp}C`;
+  setTempTextContent(
+    response.currentConditions.temp,
+    currentTemp,
+    selectedUnitGroup
+  );
   const conditionText = response.currentConditions.conditions;
   const currentCondition = createImage(
     displayConditionIcon(conditionText),
@@ -91,7 +94,12 @@ const displayWeeklyForecast = (response) => {
       dateConditionText
     );
     const dateMaxMin = document.createElement("div");
-    dateMaxMin.textContent = `${day.tempmax} / ${day.tempmin}`;
+    const dateMax = document.createElement("div");
+    const dateMin = document.createElement("div");
+
+    setTempTextContent(day.tempmax, dateMax, selectedUnitGroup);
+    setTempTextContent(day.tempmin, dateMin, selectedUnitGroup);
+    dateMaxMin.textContent = `${dateMin.textContent} / ${dateMax.textContent}`;
 
     dateFlexContainer.appendChild(dateDay.cloneNode(true));
     dateFlexContainer.appendChild(dateCondition.cloneNode(true));
@@ -163,6 +171,7 @@ const displayHourlyForecast = (response) => {
     );
     const currentHourTemp = document.createElement("div");
     currentHourTemp.textContent = hour.temp;
+    setTempTextContent(hour.temp, currentHourTemp, selectedUnitGroup);
 
     currentHourContainer.appendChild(currentDayHour.cloneNode(true));
     currentHourContainer.appendChild(currentHourCondition.cloneNode(true));
@@ -184,9 +193,13 @@ const displayAirConditions = (response) => {
   airConditionsFlexContainer.appendChild(airConditionsFlex2);
 
   const feelsLike = document.createElement("div");
-  feelsLike.textContent = `Feels Like: ${response.currentConditions.feelslike}`;
+  const feelsLikeTemp = document.createElement("div");
+  setTempTextContent(response.currentConditions.feelslike, feelsLikeTemp, selectedUnitGroup);
+  feelsLike.textContent = `Feels Like: ${feelsLikeTemp.textContent}`;
   const currentWind = document.createElement("div");
-  currentWind.textContent = `Wind Speed: ${response.currentConditions.windspeed}`;
+  selectedUnitGroup === UNITGROUPS.METRIC
+    ? (currentWind.textContent = `Wind Speed: ${response.currentConditions.windspeed} Km/h`)
+    : (currentWind.textContent = `Wind Speed: ${response.currentConditions.windspeed} m/h`);
   const uvIndex = document.createElement("div");
   uvIndex.textContent = `UV Index: ${response.currentConditions.uvindex}`;
 
@@ -266,17 +279,45 @@ const hideLoading = (element) => {
   element.innerText = "";
 };
 
+const setTempTextContent = (response, element, unitGroup) => {
+  switch (unitGroup) {
+    case UNITGROUPS.METRIC:
+      element.textContent = `${response}°C`;
+      break;
+    case UNITGROUPS.US:
+      element.textContent = `${response}°F`;
+      break;
+  }
+};
+
+//Unit groups ENUM
+const UNITGROUPS = {
+  METRIC: "metric",
+  US: "us",
+};
+
 const inputLocation = document.getElementById("input-location");
 const submit = document.getElementById("submit");
+const unitGroupToggle = document.getElementById("unit-group");
+let selectedUnitGroup = UNITGROUPS.METRIC;
+let currentLocation = "Melbourne";
 
 //Event Listeners
 submit.addEventListener("click", () => {
-  getWeatherInfo(inputLocation.value);
+  currentLocation = inputLocation.value;
+  getWeatherInfo(currentLocation, selectedUnitGroup);
 });
 inputLocation.addEventListener("keypress", (e) => {
   if (e.key === "Enter") {
-    getWeatherInfo(inputLocation.value);
+    currentLocation = inputLocation.value;
+    getWeatherInfo(currentLocation, selectedUnitGroup);
   }
 });
+unitGroupToggle.addEventListener("click", () => {
+  unitGroupToggle.checked
+    ? (selectedUnitGroup = UNITGROUPS.METRIC)
+    : (selectedUnitGroup = UNITGROUPS.US);
+  getWeatherInfo(currentLocation, selectedUnitGroup);
+});
 
-getWeatherInfo("Melbourne");
+getWeatherInfo(currentLocation, selectedUnitGroup);

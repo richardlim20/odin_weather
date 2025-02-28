@@ -12,6 +12,14 @@
     <header>
       <h1>Weather App</h1>
       <div id="input-container">
+        <div id="unit-group-container">
+          <label class="switch">
+            <input type="checkbox" name="unit-group" id="unit-group" checked>
+            <span class="slider"></span>
+          </label>
+          <div id="unit-f">F</div>
+          <div id="unit-c">C</div>
+        </div>
         <input id="input-location" name="input-location" type="text" placeholder="Search for location">
         <button id="submit">Submit Location</button>
       </div>
