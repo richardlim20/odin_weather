@@ -1,14 +1,12 @@
-import { 
-  displayConditionIcon, 
-  createImage, 
-  clearContainer, 
-  appendHeader, 
-  getCurrentPrecip, 
+import {
+  displayConditionIcon,
+  createImage,
+  clearContainer,
+  appendHeader,
+  getCurrentPrecip,
   setTempTextContent,
-  UNITGROUPS,
-  selectedUnitGroup,
-} from './helperFunctions.js';
-
+} from "./helperFunctions.js";
+import { UNITGROUPS, State } from "./settings.js";
 //Update entire UI
 export const updateUI = (response) => {
   displayCurrentForecast(response);
@@ -24,7 +22,7 @@ const displayCurrentForecast = (response) => {
   setTempTextContent(
     response.currentConditions.temp,
     currentTemp,
-    selectedUnitGroup
+    State.selectedUnitGroup
   );
   const conditionText = response.currentConditions.conditions;
   const currentCondition = createImage(
@@ -83,8 +81,8 @@ const displayWeeklyForecast = (response) => {
     const dateMax = document.createElement("div");
     const dateMin = document.createElement("div");
 
-    setTempTextContent(day.tempmax, dateMax, selectedUnitGroup);
-    setTempTextContent(day.tempmin, dateMin, selectedUnitGroup);
+    setTempTextContent(day.tempmax, dateMax, State.selectedUnitGroup);
+    setTempTextContent(day.tempmin, dateMin, State.selectedUnitGroup);
     dateMaxMin.textContent = `${dateMin.textContent} / ${dateMax.textContent}`;
 
     dateFlexContainer.appendChild(dateDay.cloneNode(true));
@@ -157,7 +155,7 @@ const displayHourlyForecast = (response) => {
     );
     const currentHourTemp = document.createElement("div");
     currentHourTemp.textContent = hour.temp;
-    setTempTextContent(hour.temp, currentHourTemp, selectedUnitGroup);
+    setTempTextContent(hour.temp, currentHourTemp, State.selectedUnitGroup);
 
     currentHourContainer.appendChild(currentDayHour.cloneNode(true));
     currentHourContainer.appendChild(currentHourCondition.cloneNode(true));
@@ -180,10 +178,14 @@ const displayAirConditions = (response) => {
 
   const feelsLike = document.createElement("div");
   const feelsLikeTemp = document.createElement("div");
-  setTempTextContent(response.currentConditions.feelslike, feelsLikeTemp, selectedUnitGroup);
+  setTempTextContent(
+    response.currentConditions.feelslike,
+    feelsLikeTemp,
+    State.selectedUnitGroup
+  );
   feelsLike.textContent = `Feels Like: ${feelsLikeTemp.textContent}`;
   const currentWind = document.createElement("div");
-  selectedUnitGroup === UNITGROUPS.METRIC
+  State.selectedUnitGroup === UNITGROUPS.METRIC
     ? (currentWind.textContent = `Wind Speed: ${response.currentConditions.windspeed} Km/h`)
     : (currentWind.textContent = `Wind Speed: ${response.currentConditions.windspeed} m/h`);
   const uvIndex = document.createElement("div");

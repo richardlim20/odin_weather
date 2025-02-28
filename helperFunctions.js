@@ -1,3 +1,4 @@
+import { UNITGROUPS } from "./settings.js";
 //Helper functions
 export const displayConditionIcon = (condition) => {
   let iconSrc;
@@ -75,11 +76,3 @@ export const setTempTextContent = (response, element, unitGroup) => {
       break;
   }
 };
-
-//Unit groups ENUM
-export const UNITGROUPS = {
-  METRIC: "metric",
-  US: "us",
-};
-
-export let selectedUnitGroup = UNITGROUPS.METRIC;

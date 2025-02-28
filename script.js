@@ -1,11 +1,6 @@
-import {
-  showLoading,
-  hideLoading,
-  UNITGROUPS,
-  selectedUnitGroup,
-} from "./helperFunctions.js";
-
+import { showLoading, hideLoading } from "./helperFunctions.js";
 import { updateUI } from "./updateUI.js";
+import { UNITGROUPS, State } from "./settings.js";
 
 const getWeatherInfo = async (location, unitGroup) => {
   try {
@@ -35,23 +30,24 @@ const inputLocation = document.getElementById("input-location");
 const submit = document.getElementById("submit");
 const unitGroupToggle = document.getElementById("unit-group");
 let currentLocation = "Melbourne";
+State.selectedUnitGroup = UNITGROUPS.METRIC;
 
 //Event Listeners
 submit.addEventListener("click", () => {
   currentLocation = inputLocation.value;
-  getWeatherInfo(currentLocation, selectedUnitGroup);
+  getWeatherInfo(currentLocation, State.selectedUnitGroup);
 });
 inputLocation.addEventListener("keypress", (e) => {
   if (e.key === "Enter") {
     currentLocation = inputLocation.value;
-    getWeatherInfo(currentLocation, selectedUnitGroup);
+    getWeatherInfo(currentLocation, State.selectedUnitGroup);
   }
 });
 unitGroupToggle.addEventListener("click", () => {
   unitGroupToggle.checked
-    ? (selectedUnitGroup = UNITGROUPS.METRIC)
-    : (selectedUnitGroup = UNITGROUPS.US);
-  getWeatherInfo(currentLocation, selectedUnitGroup);
+    ? (State.selectedUnitGroup = UNITGROUPS.METRIC)
+    : (State.selectedUnitGroup = UNITGROUPS.US);
+  getWeatherInfo(currentLocation, State.selectedUnitGroup);
 });
 
-getWeatherInfo(currentLocation, selectedUnitGroup);
+getWeatherInfo(currentLocation, State.selectedUnitGroup);
